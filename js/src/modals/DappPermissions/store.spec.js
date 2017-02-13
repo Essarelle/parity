@@ -83,8 +83,8 @@ describe('modals/DappPermissions/store', () => {
         expect(api.parity.setNewDappsWhitelist).to.have.been.calledOnce;
       });
 
-      it('has the default account in first position', () => {
-        expect(api.parity.setNewDappsWhitelist).to.have.been.calledWith(['789', '456']);
+      it('passes accounts & default account', () => {
+        expect(api.parity.setNewDappsWhitelist).to.have.been.calledWith(['456', '789'], '789');
       });
     });
 
