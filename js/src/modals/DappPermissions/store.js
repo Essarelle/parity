@@ -29,17 +29,19 @@ export default class Store {
 
   @action closeModal = () => {
     transaction(() => {
-      let addresses = null;
+      let addresses = [];
+      let defaultAddress = null;
       const checkedAccounts = this.accounts.filter((account) => account.checked);
 
       if (checkedAccounts.length) {
-        addresses = checkedAccounts.filter((account) => account.default)
-          .concat(checkedAccounts.filter((account) => !account.default))
-          .map((account) => account.address);
+        addresses = checkedAccounts.length !== this.accounts.length
+          ? checkedAccounts.map((account) => account.address)
+          : null;
+        defaultAddress = checkedAccounts.find((account) => account.default).address;
       }
 
       this.modalOpen = false;
-      this.updateWhitelist(addresses);
+      this.updateWhitelist(addresses, defaultAddress);
     });
   }
 
@@ -55,7 +57,7 @@ export default class Store {
               : true,
             default: this.whitelist
               ? this.whitelist[0] === account.address
-              : index === 0,
+              : false,
             description: account.meta.description,
             name: account.name
           };
@@ -111,9 +113,9 @@ export default class Store {
       });
   }
 
-  updateWhitelist (whitelist) {
+  updateWhitelist (whitelist, defaultAddress) {
     return this._api.parity
-      .setNewDappsWhitelist(whitelist)
+      .setNewDappsWhitelist(whitelist, defaultAddress)
       .then(() => {
         this.setWhitelist(whitelist);
       })
