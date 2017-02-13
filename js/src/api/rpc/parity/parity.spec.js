@@ -118,6 +118,29 @@ describe('api/rpc/parity', () => {
     });
   });
 
+  describe('setNewDappsWhitelist', () => {
+    const ADDRESS = '0x63Cf90D3f0410092FC0fca41846f596223979195';
+    let scope;
+
+    beforeEach(() => {
+      scope = mockHttp([{ method: 'parity_setNewDappsWhitelist', reply: { result: true } }]);
+    });
+
+    it('passes null through for addresses & defaultAddress', () => {
+      return instance.setNewDappsWhitelist(null, null).then(() => {
+        expect(scope.body.parity_setNewDappsWhitelist.params).to.deep.equal([null, null]);
+      });
+    });
+
+    it('formats properly for address & defaultAddress', () => {
+      return instance.setNewDappsWhitelist([ADDRESS], ADDRESS).then(() => {
+        expect(scope.body.parity_setNewDappsWhitelist.params).to.deep.equal(
+          [[ADDRESS.toLowerCase()], ADDRESS.toLowerCase()]
+        );
+      });
+    });
+  });
+
   describe('transactionsLimit', () => {
     it('returns the tx limit, formatted', () => {
       mockHttp([{ method: 'parity_transactionsLimit', reply: { result: 1024 } }]);

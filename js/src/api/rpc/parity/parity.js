@@ -430,9 +430,16 @@ export default class Parity {
       .execute('parity_setMode', mode);
   }
 
-  setNewDappsWhitelist (addresses) {
+  setNewDappsWhitelist (_addresses, _defaultAddress) {
+    const addresses = _addresses
+      ? inAddresses(_addresses)
+      : null;
+    const defaultAddress = _defaultAddress
+      ? inAddress(_defaultAddress)
+      : null;
+
     return this._transport
-      .execute('parity_setNewDappsWhitelist', addresses ? inAddresses(addresses) : null);
+      .execute('parity_setNewDappsWhitelist', addresses, defaultAddress);
   }
 
   setTransactionsLimit (quantity) {

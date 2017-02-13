@@ -1232,7 +1232,12 @@ export default {
       {
         type: Array,
         desc: 'List of accounts available by default.',
-        example: ['0x407d73d8a49eeb85d32cf465507dd71d507100c1']
+        example: ['0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0x1234567890123456789012345678901234567890']
+      },
+      {
+        type: Address,
+        desc: 'Default account',
+        example: '0x1234567890123456789012345678901234567890'
       }
     ],
     returns: {
